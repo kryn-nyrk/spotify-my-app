@@ -11,9 +11,9 @@ export type SpotifyProfile = {
 };
 
 export type SpotifyImage = {
-  height: number;
+  height: number | null;
   url: string;
-  width: number;
+  width: number | null;
 };
 
 export type SpotifyExternalUrls = {
@@ -86,4 +86,8 @@ export type SpotifyAudioFeature = {
 
 export type SpotifyAudioFeatureResponse = {
   audio_features: SpotifyAudioFeature[];
+};
+
+export type SpotifyRecommendationResponse = {
+  tracks: SpotifyTrack[];
 };

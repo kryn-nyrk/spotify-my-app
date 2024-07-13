@@ -4,6 +4,7 @@ import {
   SpotifySavedTracksResponse,
   SpotifyAudioFeatureResponse,
   SpotifyProfile,
+  SpotifyRecommendationResponse,
 } from '../types';
 
 export const getAccessToken = async (
@@ -115,14 +116,27 @@ export const getAudioFeatures = async (
   return data;
 };
 
-export const getRecommend = async (
+export const getRecommendation = async (
   accessToken: string,
-  seed_artists: string,
-  seed_tracks: string,
-  limit: number,
-) => {
-  const recommendApi = `https://api.spotify.com/v1/recommendations?seed_artists=${seed_artists}&seed_tracks=${seed_tracks}&limit=${limit}`;
-  const response = await fetch(recommendApi, {
+  limit: string,
+  seedTracks: string,
+  seedGenres?: string,
+  seedArtists?: string,
+): Promise<SpotifyRecommendationResponse> => {
+  const recommendationApi = `https://api.spotify.com/v1/recommendations?limit=${limit}&seed_tracks=${seedTracks}`;
+
+  const params = new URLSearchParams();
+
+  /* パラメーターが存在する場合追加する*/
+  if (seedGenres) {
+    params.append('seed_genres', seedGenres);
+  }
+
+  if (seedArtists) {
+    params.append('seed_artists', seedArtists);
+  }
+
+  const response = await fetch(recommendationApi, {
     headers: {
       Authorization: `Bearer ${accessToken}`,
     },

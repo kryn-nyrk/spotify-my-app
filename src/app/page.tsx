@@ -5,6 +5,7 @@ import { useProfile } from './hooks/useProfile';
 import { useSavedTracks } from './hooks/useSavedTracks';
 import { useSearchTracks } from './hooks/useSearchTracks';
 import { useAudioFeature } from './hooks/useAudioFeature';
+import { useRecommendation } from './hooks/useRecommendation';
 import Login from './components/Login';
 import ProfileDisplay from './components/ProfileDisplay';
 import SearchTrackList from './components/SearchTrackList';
@@ -14,6 +15,8 @@ import Modal from './components/Modal';
 import { SpotifyTrack } from './types';
 
 export default function Home() {
+  const { recommendationTracks } = useRecommendation();
+
   const { profile } = useProfile();
 
   const {
