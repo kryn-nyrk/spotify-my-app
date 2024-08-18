@@ -1,0 +1,8 @@
+{
+  "ignoreWords": [
+    "acousticness",
+    "danceability",
+    "instrumentalness",
+    "speechiness"
+  ]
+}

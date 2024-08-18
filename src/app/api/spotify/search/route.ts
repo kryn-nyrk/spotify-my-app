@@ -1,6 +1,6 @@
 import { NextRequest, NextResponse } from 'next/server';
 import { getSearchTracks } from '../../../lib/spotify';
-import { SpotifyTrack } from '../../../types';
+import { SpotifyTrack } from '../../../../types';
 
 const redirectToLogout = () => {
   return NextResponse.redirect('api/spotify/auth/logout');
@@ -24,7 +24,7 @@ export const GET = async (request: NextRequest) => {
       accessToken,
       query,
       limit,
-      offset,
+      offset
     );
 
     return NextResponse.json({
@@ -35,7 +35,7 @@ export const GET = async (request: NextRequest) => {
   } catch (error) {
     return NextResponse.json(
       { error: 'アクセストークンが無効です。' },
-      { status: 401 },
+      { status: 401 }
     );
   }
 };

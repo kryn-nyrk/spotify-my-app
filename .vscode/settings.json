@@ -1,0 +1,14 @@
+{
+  "editor.formatOnSave": true, // ファイル保存時に自動でフォーマット
+  "editor.defaultFormatter": "esbenp.prettier-vscode", // Prettierをデフォルトのフォーマッタとして設定
+  "prettier.semi": true,
+  "prettier.tabWidth": 2,
+  "prettier.useTabs": false,
+  "prettier.singleQuote": true,
+  "prettier.trailingComma": "es5",
+  "prettier.printWidth": 80,
+  "prettier.bracketSpacing": true,
+  "prettier.jsxBracketSameLine": false,
+  "prettier.arrowParens": "always",
+  "prettier.endOfLine": "lf"
+}

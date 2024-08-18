@@ -10,22 +10,24 @@ export async function GET(request: NextRequest) {
     );
   }
 
-  const profileEndpoint = 'https://api.spotify.com/v1/me';
+  const availableGenreSeedsEndpoint =
+    'https://api.spotify.com/v1/recommendations/available-genre-seeds';
 
   try {
-    const response = await fetch(profileEndpoint, {
+    const response = await fetch(availableGenreSeedsEndpoint, {
       headers: {
         Authorization: `Bearer ${accessToken}`,
       },
     });
 
     if (!response.ok) {
-      throw new Error('プロフィール情報の取得に失敗しました。');
+      throw new Error('ジャンルの取得に失敗しました。');
     }
 
-    const profileData = await response.json();
+    const genresData = await response.json();
 
-    return NextResponse.json(profileData);
+    return NextResponse.json(genresData);
+
     // any?
   } catch (error: any) {
     return NextResponse.json({ error: error.message }, { status: 500 });
