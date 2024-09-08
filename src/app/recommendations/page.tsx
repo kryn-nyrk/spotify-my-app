@@ -5,12 +5,12 @@ import { useSearchParams } from 'next/navigation';
 import { useAudioFeatures } from '@/hooks/useAudioFeatures';
 import { useRecommendations } from '@/hooks/useRecommendations';
 import { useCreatePlaylist } from '@/hooks/useCreatePlaylist';
-import Loading from '@/components/Loading';
 import GenreCheckBox from '@/components/GenreCheckBox';
-import TrackCard from '@/components/TrackCard';
-import SelectTrackDisplay from '@/components/SelectTrackDisplay';
+import RecommendationsTrackList from '@/components/RecommendationsTrackList';
+import TabSwitcher from '@/components/TabSwitcher';
+import TrackDisplay from '@/components/TrackDisplay';
 import PlaylistCreator from '@/components/PlaylistCreator';
-import { SpotifyTrack } from '@/types';
+import { SpotifyTrackDisplay } from '@/types';
 
 const RecommendationsPage = () => {
   const params = useSearchParams();
@@ -19,39 +19,19 @@ const RecommendationsPage = () => {
   const trackArtist = params.get('trackArtist');
   const trackImage = params.get('trackImage');
 
-  const trackDetails = {
+  const { audioFeatures } = useAudioFeatures(trackId as string);
+
+  const trackDisplay: SpotifyTrackDisplay = {
     name: trackName as string,
     artist: trackArtist as string,
     image: trackImage as string,
+    audioFeatures,
   };
-
-  const { audioFeatures } = useAudioFeatures(trackId as string);
 
   const [selectedGenres, setSelectedGenres] = useState<string[]>([]);
   const handleGenreChange = (genre: string) => {
-    /*
-    if (selectedGenres.length >= 5 && !selectedGenres.includes(genre)) {
-      alert('選択できるジャンルは5つまでです。');
-      return;
-    }
-
-    console.log('genre is: ', genre);
-    */
-    setSelectedGenres(
-      (prev) =>
-        prev.includes(genre)
-          ? prev.filter((g) => g !== genre)
-          : [...prev, genre]
-      /*
-      console.log('prev is: ', prev);
-      const isGenreSelected = prev.includes(genre);
-      console.log('isGenreSelected is: ', isGenreSelected);
-      const updateGenre = isGenreSelected
-        ? prev.filter((g) => g !== genre)
-        : [...prev, genre];
-      console.log('updateGenre is: ', updateGenre);
-      return updateGenre;
-      */
+    setSelectedGenres((prev) =>
+      prev.includes(genre) ? prev.filter((g) => g !== genre) : [...prev, genre]
     );
   };
 
@@ -59,35 +39,51 @@ const RecommendationsPage = () => {
     setSelectedGenres((prev) => prev.filter((g) => g !== genre));
   };
 
-  const { recommendationsTracks } = useRecommendations(
-    [trackId as string],
-    selectedGenres
-  );
+  const {
+    recommendationsTracks,
+    isLoading,
+    targetTrackDisplay,
+    onTargetTrackDisplay,
+  } = useRecommendations([trackId as string], selectedGenres);
 
   const { playlist, addToPlaylist, removeFromPlaylist, createPlaylist } =
     useCreatePlaylist();
 
   return (
     <>
-      <div className="grid grid-cols-2 gap-3">
-        <TrackCard
-          tracks={recommendationsTracks}
-          onAddToPlaylist={addToPlaylist}
-        />
-        <PlaylistCreator
-          playlist={playlist}
-          removeFromPlaylist={removeFromPlaylist}
-          createPlaylist={createPlaylist}
-        />
-        <GenreCheckBox
-          selectedGenres={selectedGenres}
-          handleGenreChange={handleGenreChange}
-          handleGenreRemove={handleGenreRemove}
-        />
-        <SelectTrackDisplay
-          audioFeatures={audioFeatures}
-          trackDetails={trackDetails}
-        />
+      <div className="grid grid-rows-1 lg:grid-cols-2 md:grid-cols-1 m-10 gap-10">
+        {/* 左側: RecommendationsTrackListとGenreCheckBox */}
+        <div className="col-span-1 space-y-5">
+          <TabSwitcher
+            recommendationsTab={
+              <RecommendationsTrackList
+                tracks={recommendationsTracks}
+                onAddToPlaylist={addToPlaylist}
+                onTargetTrackDisplay={onTargetTrackDisplay}
+                isLoading={isLoading}
+              />
+            }
+            playlistTab={
+              <PlaylistCreator
+                playlist={playlist}
+                removeFromPlaylist={removeFromPlaylist}
+                createPlaylist={createPlaylist}
+              />
+            }
+          />
+
+          <GenreCheckBox
+            selectedGenres={selectedGenres}
+            handleGenreChange={handleGenreChange}
+            handleGenreRemove={handleGenreRemove}
+          />
+        </div>
+
+        {/* 右側: TrackDisplay */}
+        <div className="col-span-1 space-y-5">
+          <TrackDisplay title="Select Track" track={trackDisplay} />
+          <TrackDisplay title="Target Track" track={targetTrackDisplay} />
+        </div>
       </div>
     </>
   );

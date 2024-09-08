@@ -1,7 +1,8 @@
 import type { Metadata } from 'next';
 import { Inter } from 'next/font/google';
 import './globals.css';
-import ProfileDisplay from '../components/ProfileDisplay';
+import Header from '@/components/Header';
+import Footer from '@/components/Footer';
 
 const inter = Inter({ subsets: ['latin'] });
 
@@ -17,14 +18,15 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="en">
-      <body className={inter.className}>
-        <header className="text-center font-bold text-lg">
-          spotify audio-features with parameters
-        </header>
+      <body className="{inter.className} bg-gray-800">
         <div>
-          <ProfileDisplay />
+          <h1 className="text-center text-gray-100 text-lg font-bold p-3">
+            Parameter with Spotify Audio Features
+          </h1>
+          <Header />
         </div>
         <main>{children}</main>
+        <Footer />
       </body>
     </html>
   );

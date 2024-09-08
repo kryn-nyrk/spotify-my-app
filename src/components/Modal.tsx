@@ -25,8 +25,11 @@ const Modal: React.FC<ModalProps> = ({
 
   return (
     <div className="fixed inset-0 z-50 flex items-center justify-center bg-black bg-opacity-50">
-      <div className="bg-white p-6 rounded-md shadow-lg" onClick={onClose}>
-        <h2 className="text-xl font-semibold mb-4">{title}</h2>
+      <div
+        className="m-10 bg-gray-100 p-6 rounded-md shadow-lg"
+        onClick={onClose}
+      >
+        <h2 className="text-xl text-center font-semibold mb-4">{title}</h2>
         <div className="mb-4">{children}</div>
         <div className="flex justify-end space-x-2">
           <button

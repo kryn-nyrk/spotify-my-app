@@ -85,6 +85,7 @@ export type SpotifyAudioFeatures = {
   speechiness: number;
   tempo: number;
   valence: number;
+  duration_ms: number;
 };
 
 export type SpotifyRecommendations = {
@@ -96,4 +97,11 @@ export type SpotifyRecommendations = {
     href: string;
   }[];
   tracks: SpotifyTrack[];
+};
+
+export type SpotifyTrackDisplay = {
+  name: string;
+  artist: string;
+  image?: string;
+  audioFeatures: SpotifyAudioFeatures | undefined;
 };

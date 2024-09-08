@@ -1,6 +1,7 @@
 'use client';
 
-import React from 'react';
+import React, { useEffect, useRef } from 'react';
+import { animateBars } from '@/animations';
 import { SpotifyAudioFeatures } from '@/types';
 
 type AudioFeaturesParameterProps = {
@@ -19,11 +20,18 @@ const multiplyBy100 = (
 const AudioFeaturesParameter: React.FC<AudioFeaturesParameterProps> = ({
   audioFeatures,
 }) => {
-  console.log(audioFeatures);
+  const barRefs = useRef<HTMLElement[]>([]);
+
+  useEffect(() => {
+    if (barRefs.current.length > 0) {
+      animateBars(barRefs.current);
+    }
+  }, [audioFeatures]);
+
   const data = [
     {
       label: 'acousticness',
-      color: 'bg-amber-700',
+      color: 'bg-amber-900',
       value: multiplyBy100(audioFeatures?.acousticness),
     },
     {
@@ -38,7 +46,7 @@ const AudioFeaturesParameter: React.FC<AudioFeaturesParameterProps> = ({
     },
     {
       label: 'instrumentalness',
-      color: 'bg-teal-500',
+      color: 'bg-blue-600',
       value: multiplyBy100(audioFeatures?.instrumentalness),
     },
     {
@@ -48,7 +56,7 @@ const AudioFeaturesParameter: React.FC<AudioFeaturesParameterProps> = ({
     },
     {
       label: 'speechiness',
-      color: 'bg-emerald-400',
+      color: 'bg-emerald-300',
       value: multiplyBy100(audioFeatures?.speechiness),
     },
     {
@@ -60,19 +68,25 @@ const AudioFeaturesParameter: React.FC<AudioFeaturesParameterProps> = ({
 
   return (
     <>
-      <div className="border rounded-xl bg-white bg-opacity-30 p-3 font-mono shadow-xl ">
+      <div className=" rounded-xl bg-gray-300 bg-opacity-50 p-4 font-mono shadow-xl ">
+        <h2 className="text-center text-lg text-gray-100 font-semibold">
+          Features
+        </h2>
         {data.map((item, index) => (
-          <>
-            <h2 className="text-xs mb-1">
-              {item.label}: <span className="text-gray-500">{item.value}</span>
+          <React.Fragment key={index}>
+            <h2 className="text-xs text-gray-100 mb-1">
+              {item.label}: <span className="text-gray-400">{item.value}</span>
             </h2>
 
             <div
-              key={index}
-              className={`${item.color} bg-opacity-60 rounded-md text-md shadow-lg p-2 mb-2`}
-              style={{ width: `${item.value}%` }}
+              ref={(el) => {
+                if (el) barRefs.current[index] = el;
+              }}
+              data-width={item.value}
+              className={`${item.color} rounded-md text-md shadow-lg p-2 mb-2`}
+              style={{ width: `0%` }}
             ></div>
-          </>
+          </React.Fragment>
         ))}
       </div>
     </>

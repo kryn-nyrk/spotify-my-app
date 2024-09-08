@@ -1,45 +1,57 @@
+'use client';
+
 import React from 'react';
+import Link from 'next/link';
+import Image from 'next/image';
 import PreviewPlayer from './PreviewPlayer';
 import { SpotifyTrack } from '@/types';
 
 type TrackCardProps = {
-  tracks: SpotifyTrack[];
+  track: SpotifyTrack;
   onAddToPlaylist: (track: SpotifyTrack) => void;
+  onTargetTrackDisplay: (track: SpotifyTrack) => void;
 };
 
-const TrackCard: React.FC<TrackCardProps> = ({ tracks, onAddToPlaylist }) => {
+const TrackCard: React.FC<TrackCardProps> = ({
+  track,
+  onAddToPlaylist,
+  onTargetTrackDisplay,
+}) => {
   return (
-    <div className="bg-white rounded-lg shadow-md overflow-hidden">
-      <h2 className="text-2xl font-semibold mb-4">Recommendations</h2>
-      {tracks.map((track) => (
-        <div key={track.id}>
-          <img
-            src={track.album.images[1].url}
-            alt={track.name}
-            className="w-full h-48 object-cover"
-          />
-          <div className="p-4 flex justify-between items-center">
-            <div>
-              <h3 className="text-lg font-semibold text-gray-800">
-                {track.name}
-              </h3>
-              <p className="text-gray-600">
-                {track.artists.map((artist) => artist.name).join(', ')}
-              </p>
-            </div>
-            {track.preview_url && (
-              <PreviewPlayer previewUrl={track.preview_url} />
-            )}
-
-            <button
-              onClick={() => onAddToPlaylist(track)}
-              className="bg-blue-500 hover:bg-blue-700 text-white rounded-full px-4 py-2 ml-4"
-            >
-              add
-            </button>
-          </div>
+    <div className="flex items-center mb-4 p-2 bg-gray-700  rounded-lg">
+      <img
+        onClick={() => onTargetTrackDisplay(track)}
+        src={track.album.images[0]?.url}
+        alt={track.name}
+        className="w-16 h-16 object-cover cursor-pointer rounded-md transition-transform transform hover:scale-110"
+      />
+      <div className="ml-4 flex-1">
+        <div>
+          <p className="text-lg font-semibold text-gray-200">{track.name}</p>
+          <p className="text-gray-400">
+            {track.artists.map((artist) => artist.name).join(', ')}
+          </p>
         </div>
-      ))}
+        <div className="flex items-center justify-end mt-2 space-x-4">
+          {track.preview_url && (
+            <PreviewPlayer previewUrl={track.preview_url} />
+          )}
+          <Link href={track.external_urls.spotify} target="_blank">
+            <Image
+              src="/images/Spotify_Logo_RGB_Green.png"
+              alt="Spotifyで再生"
+              width={120}
+              height={120}
+            />
+          </Link>
+          <button
+            onClick={() => onAddToPlaylist(track)}
+            className="ml-auto bg-blue-500 hover:bg-blue-700 text-white rounded-full p-2"
+          >
+            Add
+          </button>
+        </div>
+      </div>
     </div>
   );
 };

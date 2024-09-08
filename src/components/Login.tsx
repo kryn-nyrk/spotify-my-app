@@ -2,15 +2,11 @@ import React from 'react';
 import { cookies } from 'next/headers';
 
 const LoginButton = () => (
-  <button className="bg-green-600 hover:bg-green-500 text-white rounded-lg w-24 h-10">
-    <a href="api/spotify/auth/login">Login</a>
-  </button>
-);
-
-const LogoutButton = () => (
-  <button className="bg-red-600 hover:bg-red-500 text-white rounded-lg w-24 h-10">
-    Logout
-  </button>
+  <div className="mt-5">
+    <button className="bg-green-600 hover:bg-green-500 text-white rounded-lg w-24 h-10">
+      <a href="api/spotify/auth/login">Let's play!</a>
+    </button>
+  </div>
 );
 
 const Login = () => {
@@ -18,7 +14,13 @@ const Login = () => {
   const token = cookie.get('spotify_access_token')?.value;
 
   if (token) {
-    return <LogoutButton />;
+    return (
+      <div>
+        <button className="bg-green-600 hover:bg-green-500 text-white rounded-lg w-24 h-10">
+          <a href="/savedTracks">Replay</a>
+        </button>
+      </div>
+    );
   }
 
   return <LoginButton />;
