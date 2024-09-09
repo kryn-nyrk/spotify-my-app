@@ -50,20 +50,12 @@ export const GET = async (request: NextRequest) => {
     const data = await response.json();
 
     const accessToken = data.access_token;
-    //const refreshToken = data.refresh_token;
 
-    //
     const responseHeaders = new Headers();
     responseHeaders.set(
       'Set-Cookie',
       `spotify_access_token=${accessToken}; HttpOnly; Path=/; Max-Age=3600;`
     );
-    /*
-    responseHeaders.set(
-      'Set-Cookie',
-      `spotify_refresh_token=${refreshToken}; HttpOnly; Path=/; Max-age=604800`
-    );
-    */
 
     // 仮のリダイレクトURL
     return NextResponse.redirect('http://localhost:3000/savedTracks', {

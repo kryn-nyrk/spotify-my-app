@@ -1,13 +1,13 @@
 'use client';
 
-import { useState } from 'react';
 import { useRouter } from 'next/navigation';
 import SavedTrackList from '@/components/SavedTrackList';
-import Modal from '@/components/Modal';
+import ErrorMessage from '@/components/ErrorMessage';
 import Loading from '@/components/Loading';
 import TrackDetailsModal from '@/components/TrackDetailsModal';
 import PaginationControls from '@/components/PaginationControls';
 import { useSavedTracks } from '@/hooks/useSavedTracks';
+import { useTrackModal } from '@/hooks/useTrackModal';
 import { SpotifyTrack } from '@/types';
 
 const SavedTracksPage = () => {
@@ -26,21 +26,9 @@ const SavedTracksPage = () => {
     limit,
   } = useSavedTracks();
 
-  const [selectedTrack, setSelectedTrack] = useState<SpotifyTrack | undefined>(
-    undefined
-  );
-  const [isModalOpen, setIsModalOpen] = useState(false);
+  const { selectedTrack, isModalOpen, openModal, closeModal } = useTrackModal();
+
   const router = useRouter();
-
-  const handleTrackClick = (track: SpotifyTrack) => {
-    setSelectedTrack(track);
-    setIsModalOpen(true);
-  };
-
-  const handleModalClose = () => {
-    setIsModalOpen(false);
-    setSelectedTrack(undefined);
-  };
 
   const navigateToRecommendations = (track: SpotifyTrack) => {
     const params = new URLSearchParams({
@@ -57,7 +45,7 @@ const SavedTracksPage = () => {
     if (selectedTrack) {
       navigateToRecommendations(selectedTrack);
     }
-    setIsModalOpen(false);
+    closeModal();
   };
 
   if (isLoading) {
@@ -65,7 +53,7 @@ const SavedTracksPage = () => {
   }
 
   if (error) {
-    return <p>{error}</p>;
+    return <ErrorMessage message={error} />;
   }
 
   return (
@@ -73,13 +61,13 @@ const SavedTracksPage = () => {
       <SavedTrackList
         savedTracks={savedTracks}
         total={total}
-        onTrackClick={handleTrackClick}
+        onTrackClick={openModal}
       />
       {isModalOpen && selectedTrack && (
         <TrackDetailsModal
           track={selectedTrack}
           isOpen={isModalOpen}
-          onClose={handleModalClose}
+          onClose={closeModal}
           onOk={handleOkClick}
         />
       )}

@@ -9,7 +9,7 @@ import {
 import { useAudioFeatures } from './useAudioFeatures';
 
 export const useRecommendations = (
-  seedTracks: string[] | null,
+  seedTracks: string | null,
   seedGenres: string[] | null,
   limit: number = 50
 ) => {
@@ -39,16 +39,25 @@ export const useRecommendations = (
 
   useEffect(() => {
     const fetchRecommendations = async () => {
+      setIsLoading(true);
+      setError(null);
       try {
-        setIsLoading(true);
         const response = await fetch(
           `api/spotify/recommendations?seed_tracks=${seedTracks}&seed_genres=${seedGenres}&limit=${limit}`
         );
+
+        if (!response.ok) {
+          const errorData = await response.json();
+          throw new Error(
+            errorData.error ||
+              'レコメンデーショントラックの取得に失敗しました。'
+          );
+        }
+
         const data: SpotifyRecommendations = await response.json();
-        console.log(data);
         setRecommendationsTracks(data.tracks);
       } catch (error) {
-        setError('おすすめトラックの取得に失敗しました。');
+        setError('レコメンデーショントラックの取得に失敗しました。');
       } finally {
         setIsLoading(false);
       }

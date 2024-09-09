@@ -18,11 +18,20 @@ export const useSavedTracks = () => {
 
   useEffect(() => {
     const fetchSavedTracks = async () => {
+      setIsLoading(true);
+      setError(null);
       try {
-        setIsLoading(true);
         const response = await fetch(
           `/api/spotify/saved-tracks?limit=${limit}&offset=${offset}`
         );
+
+        if (!response.ok) {
+          const errorData = await response.json();
+          throw new Error(
+            errorData.error || 'お気に入りトラックの取得に失敗しました。'
+          );
+        }
+
         const data: SpotifySavedTracks = await response.json();
         setSavedTracks(data.items);
         setTotal(data.total);

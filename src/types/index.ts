@@ -100,8 +100,8 @@ export type SpotifyRecommendations = {
 };
 
 export type SpotifyTrackDisplay = {
-  name: string;
-  artist: string;
-  image?: string;
+  name: string | null;
+  artist: string | null;
+  image?: string | null;
   audioFeatures: SpotifyAudioFeatures | undefined;
 };

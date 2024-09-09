@@ -1,6 +1,9 @@
-import React from 'react';
+'use client';
+
+import { useEffect, useRef } from 'react';
 import AudioFeaturesParameter from './AudioFeaturesParameter';
 import AudioFeaturesInfo from './AudioFeaturesInfo';
+import { fadeIn } from '@/animations';
 import { SpotifyTrackDisplay } from '@/types';
 
 type TrackDisplayProps = {
@@ -9,6 +12,14 @@ type TrackDisplayProps = {
 };
 
 const TrackDisplay: React.FC<TrackDisplayProps> = ({ title, track }) => {
+  const fadeInRef = useRef<HTMLDivElement>(null);
+
+  useEffect(() => {
+    if (fadeInRef.current) {
+      fadeIn(fadeInRef.current, 3000);
+    }
+  }, [fadeInRef, track]);
+
   return (
     <div className="w-full h-fit mx-auto  rounded-lg bg-gray-900 p-2 flex flex-col justify-center shadow-lg">
       <h3 className="text-center font-semibold leading-6 text-gray-200 p-3">
@@ -17,7 +28,7 @@ const TrackDisplay: React.FC<TrackDisplayProps> = ({ title, track }) => {
       {track ? (
         <div className="flex">
           {/* 左側: トラックの詳細 */}
-          <div className=" w-1/2 text-center m-2 p-2">
+          <div ref={fadeInRef} className=" w-1/2 text-center m-2 p-2">
             <img
               className="shadow-xl rounded-xl mb-4"
               src={track.image}

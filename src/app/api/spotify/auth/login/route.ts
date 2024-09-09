@@ -1,5 +1,15 @@
 import { NextRequest, NextResponse } from 'next/server';
-import { generateRandomString } from '@/utils/helpers';
+
+const generateRandomString = (length: number): string => {
+  let text = '';
+  const possible =
+    'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789';
+
+  for (let i = 0; i < length; i++) {
+    text += possible.charAt(Math.floor(Math.random() * possible.length));
+  }
+  return text;
+};
 
 export const GET = (request: NextRequest) => {
   const clientId = process.env.CLIENT_ID as string;

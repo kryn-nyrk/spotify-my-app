@@ -4,8 +4,8 @@ import { SpotifySavedTracks } from '@/types';
 export async function GET(request: NextRequest) {
   const accessToken = request.cookies.get('spotify_access_token')?.value;
   const { searchParams } = new URL(request.url);
-  const limit = searchParams.get('limit');
-  const offset = searchParams.get('offset');
+  const limit = searchParams.get('limit') || '20';
+  const offset = searchParams.get('offset') || '0';
 
   if (!accessToken) {
     return NextResponse.json(
@@ -28,12 +28,25 @@ export async function GET(request: NextRequest) {
     });
 
     if (!response.ok) {
-      throw new Error('お気に入りトラックの取得に失敗しました。');
+      if (response.status === 401) {
+        {
+          error: 'アクセストークンが無効です。再ログインしてください。';
+        }
+        {
+          status: 401;
+        }
+      }
+      const errorMessage = `お気に入りトラックの取得に失敗しました。　　ステータス: ${response.status}`;
+      throw new Error(errorMessage);
     }
 
-    const data = await response.json();
+    const data: SpotifySavedTracks = await response.json();
     return NextResponse.json(data);
   } catch (error: any) {
-    return NextResponse.json({ error: error.message }, { status: 500 });
+    console.error('お気に入りトラックの取得に失敗しました。', error.message);
+    return NextResponse.json(
+      { error: 'サーバーエラーが発生しました。後ほど再試行してください。' },
+      { status: 500 }
+    );
   }
 }

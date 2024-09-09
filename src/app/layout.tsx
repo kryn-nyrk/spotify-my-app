@@ -19,12 +19,7 @@ export default function RootLayout({
   return (
     <html lang="en">
       <body className="{inter.className} bg-gray-800">
-        <div>
-          <h1 className="text-center text-gray-100 text-lg font-bold p-3">
-            Parameter with Spotify Audio Features
-          </h1>
-          <Header />
-        </div>
+        <Header />
         <main>{children}</main>
         <Footer />
       </body>

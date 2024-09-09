@@ -15,7 +15,7 @@ const Login = () => {
 
   if (token) {
     return (
-      <div>
+      <div className="mt-5">
         <button className="bg-green-600 hover:bg-green-500 text-white rounded-lg w-24 h-10">
           <a href="/savedTracks">Replay</a>
         </button>

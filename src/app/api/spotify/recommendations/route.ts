@@ -41,8 +41,12 @@ export const GET = async (request: NextRequest) => {
     const data: SpotifyRecommendations = await response.json();
     return NextResponse.json(data);
   } catch (error) {
+    console.error('レコメンデーションズトラックの取得に失敗しました。', error);
     return NextResponse.json(
-      { error: '/spi/spotify/recommendationsにてエラーが発生しました。' },
+      {
+        error:
+          'サーバーで予期しないエラーが発生しました。後ほど再試行してください。',
+      },
       { status: 500 }
     );
   }
