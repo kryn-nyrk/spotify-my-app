@@ -10,7 +10,7 @@ const Header = () => {
 
   useEffect(() => {
     if (typingRef.current) {
-      typingAnimation(typingRef.current, text, 4500);
+      typingAnimation(typingRef.current, text, 3000);
     }
   }, [typingRef]);
 
