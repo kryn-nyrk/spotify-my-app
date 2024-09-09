@@ -58,9 +58,12 @@ export const GET = async (request: NextRequest) => {
     );
 
     // 仮のリダイレクトURL
-    return NextResponse.redirect('http://localhost:3000/savedTracks', {
-      headers: responseHeaders,
-    });
+    return NextResponse.redirect(
+      'https://prameter-with-spotify-audio-features.vercel.app/savedTracks',
+      {
+        headers: responseHeaders,
+      }
+    );
     // any? のちほど定義
   } catch (error: any) {
     return NextResponse.json({ error: error.message }, { status: 500 });
