@@ -1,7 +1,6 @@
 import React from 'react';
 import Login from '@/components/Login';
 import SampleTrackDisplay from '@/components/SampleTrackDisplay';
-import TrackDisplay from '@/components/TrackDisplay';
 import { data } from '@/sample/sampleTracks';
 
 export default function Home() {

@@ -4,7 +4,6 @@ import { useState } from 'react';
 import SelectedGenres from './SelectedGenres';
 import CategoryDropdown from './CategoryDropdown';
 import GenreList from './GenreList';
-import Dropdown from './Dropdown';
 
 type MusicGenresType = {
   [key: string]: string[];

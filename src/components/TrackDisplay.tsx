@@ -29,20 +29,30 @@ const TrackDisplay: React.FC<TrackDisplayProps> = ({ title, track }) => {
         <div className="flex">
           {/* 左側: トラックの詳細 */}
           <div ref={fadeInRef} className=" w-1/2 text-center m-2 p-2">
-            <img
-              className="shadow-xl rounded-xl mb-4"
-              src={track.image}
-              alt="Album cover"
-            />
+            {track.image ? (
+              <img
+                className="shadow-xl rounded-xl mb-4"
+                src={track.image}
+                alt="Album cover"
+              />
+            ) : (
+              <div className="shadow-xl rounded-xl mb-4 bg-gray-800 h-48 w-48 mx-auto" />
+            )}
             <h3 className="font-bold text-gray-300 text-xl mb-1">
-              {track.name}
+              {track.name ?? 'No Title'}
             </h3>
-            <p className="text-gray-500 mb-4">{track.artist}</p>
+            <p className="text-gray-500 mb-4">
+              {track.artist ?? 'Unknown Artist'}
+            </p>
             <AudioFeaturesInfo audioFeatures={track.audioFeatures} />
           </div>
           {/* 右側: パラメーター部分*/}
           <div className="w-1/2 m-2 p-2">
-            <AudioFeaturesParameter audioFeatures={track.audioFeatures} />
+            {track.audioFeatures ? (
+              <AudioFeaturesParameter audioFeatures={track.audioFeatures} />
+            ) : (
+              <p className="text-gray-500">No Audio Features Available</p>
+            )}
           </div>
         </div>
       ) : (
@@ -51,7 +61,7 @@ const TrackDisplay: React.FC<TrackDisplayProps> = ({ title, track }) => {
             No track in target track
           </p>
           <p className="text-red-600 text-center font-bold m-2">
-            please, Recommendations track image to tap!
+            Please, tap on a recommended track image!
           </p>
         </>
       )}

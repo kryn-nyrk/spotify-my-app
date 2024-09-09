@@ -18,21 +18,31 @@ const TargetTrackDisplay: React.FC<TargetTrackDisplayProps> = ({
         <div className="flex">
           {/* 左側: トラックの詳細 */}
           <div className=" w-1/2 text-center m-2 p-2">
-            <img
-              className="shadow-xl rounded-xl mb-4"
-              src={trackDisplay.image}
-              alt="Album cover"
-            />
+            {trackDisplay.image ? (
+              <img
+                className="shadow-xl rounded-xl mb-4"
+                src={trackDisplay.image}
+                alt="Album cover"
+              />
+            ) : (
+              <div className="shadow-xl rounded-xl mb-4 bg-gray-200 h-48" />
+            )}
             <h3 className="font-bold text-gray-800 text-xl mb-1">
-              {trackDisplay.name}
+              {trackDisplay.name ?? 'No Title'}
             </h3>
-            <p className="text-gray-500 mb-4">{trackDisplay.artist}</p>
+            <p className="text-gray-500 mb-4">
+              {trackDisplay.artist ?? 'Unknown Artist'}
+            </p>
           </div>
           {/* 右側: パラメーター部分*/}
           <div className="w-1/2 m-2 p-2">
-            <AudioFeaturesParameter
-              audioFeatures={trackDisplay.audioFeatures}
-            />
+            {trackDisplay.audioFeatures ? (
+              <AudioFeaturesParameter
+                audioFeatures={trackDisplay.audioFeatures}
+              />
+            ) : (
+              <p>No Audio Features Available</p>
+            )}
           </div>
         </div>
       )}
